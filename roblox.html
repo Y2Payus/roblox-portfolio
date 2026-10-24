@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#070812" />
+  <title>Roblox Work | Y2Payus</title>
+  <meta name="description" content="UI, GUI designs and tools by Y2Payus." />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="work-page">
+  <canvas id="bg" aria-hidden="true"></canvas>
+
+  <header class="nav">
+    <a class="logo" href="index.html"><svg class="logo-mark" viewBox="0 0 32 32" width="26" height="26" aria-hidden="true"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M4 10l12 7 12-7M16 17v12" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span>Y2Payus Roblox's Portfolio</span></a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#skills">Skills</a>
+      <a href="roblox.html" class="active">Roblox Work</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="section work-head">
+      <a class="back" href="index.html">← Back to home</a>
+      <p class="kicker reveal">Featured Work</p>
+      <h1 class="reveal">My Roblox Projects</h1>
+      <p class="intro reveal">UI and GUI designs I've made, plus the tools I use. Filter by type to browse.</p>
+      <div class="filters reveal" id="filters"></div>
+    </section>
+
+    <section class="section tight">
+      <div class="grid" id="project-grid"></div>
+      <p class="empty" id="empty" hidden>No projects in this category yet.</p>
+    </section>
+
+    <section class="section" id="devlog">
+      <p class="kicker reveal">Code Samples</p>
+      <h3 class="reveal">CS-style weapon system in Luau</h3>
+      <p class="reveal sample-note">A server-side hitscan rifle inspired by CS2 and Counter Blox: learnable spray pattern, movement inaccuracy, damage falloff, headshots and wall penetration.</p>
+      <pre class="code reveal"><code>--!strict
+-- WeaponService (server): CS-style hitscan rifle
+-- Spray pattern recoil, movement inaccuracy, damage falloff,
+-- headshot multiplier and wall penetration.
+
+local Workspace = game:GetService("Workspace")
+
+local Weapon = {}
+Weapon.__index = Weapon
+
+local STATS = {
+	Damage = 36,
+	HeadshotMultiplier = 4,
+	FireRate = 0.1,           -- seconds between shots
+	Range = 400,              -- studs
+	FalloffPerStud = 0.0012,  -- damage lost per stud travelled
+	WallDamageKeep = 0.5,     -- damage kept after each wall
+	MaxPenetration = 2,       -- walls one bullet can pass through
+	RecoilResetTime = 0.35,   -- stop shooting this long = spray resets
+
+	-- Fixed spray pattern (x = yaw, y = pitch, in degrees).
+	-- Players can learn it and counter it, like in CS.
+	Spray = {
+		Vector2.new(0, 0),     Vector2.new(0, 0.9),    Vector2.new(0.1, 1.8),
+		Vector2.new(-0.2, 2.8), Vector2.new(-0.8, 3.6), Vector2.new(-1.4, 4.1),
+		Vector2.new(-0.6, 4.5), Vector2.new(1.2, 4.8),  Vector2.new(2.0, 5.0),
+	},
+}
+
+function Weapon.new(player: Player)
+	return setmetatable({
+		Player = player,
+		ShotIndex = 0,
+		LastShot = 0,
+	}, Weapon)
+end
+
+-- Random spread: bigger while moving or airborne, tight when standing still
+local function getInaccuracy(character: Model): number
+	local humanoid = character:FindFirstChildOfClass("Humanoid")
+	local root = character:FindFirstChild("HumanoidRootPart") :: BasePart?
+	if not humanoid or not root then
+		return 0
+	end
+
+	local v = root.AssemblyLinearVelocity
+	local speed = Vector3.new(v.X, 0, v.Z).Magnitude
+	local spread = math.clamp(speed / humanoid.WalkSpeed, 0, 1) * 4
+
+	if humanoid.FloorMaterial == Enum.Material.Air then
+		spread += 6
+	end
+	return spread
+end
+
+function Weapon:Fire(aimDirection: Vector3)
+	local now = os.clock()
+	if now - self.LastShot &lt; STATS.FireRate then
+		return
+	end
+
+	-- Spray resets if the player let go of the trigger
+	if now - self.LastShot &gt; STATS.RecoilResetTime then
+		self.ShotIndex = 0
+	end
+	self.LastShot = now
+	self.ShotIndex = math.min(self.ShotIndex + 1, #STATS.Spray)
+
+	local character = self.Player.Character
+	local head = character and character:FindFirstChild("Head") :: BasePart?
+	if not character or not head then
+		return
+	end
+
+	-- Origin comes from the server's view of the player, never the client
+	local origin = head.Position
+	local pattern = STATS.Spray[self.ShotIndex]
+	local spread = getInaccuracy(character)
+
+	local yaw = math.rad(pattern.X + (math.random() - 0.5) * spread)
+	local pitch = math.rad(pattern.Y + (math.random() - 0.5) * spread)
+	local aim = CFrame.lookAt(origin, origin + aimDirection) * CFrame.Angles(pitch, yaw, 0)
+	local direction = aim.LookVector * STATS.Range
+
+	local ignore: { Instance } = { character }
+	local params = RaycastParams.new()
+	params.FilterType = Enum.RaycastFilterType.Exclude
+
+	local startPos = origin
+	local damageScale = 1
+	local walls = 0
+
+	while walls &lt;= STATS.MaxPenetration do
+		params.FilterDescendantsInstances = ignore
+		local result = Workspace:Raycast(startPos, direction, params)
+		if not result then
+			break
+		end
+
+		local hit = result.Instance
+		local victim = hit:FindFirstAncestorOfClass("Model")
+		local humanoid = victim and victim:FindFirstChildOfClass("Humanoid")
+
+		if humanoid and humanoid.Health &gt; 0 then
+			local distance = (result.Position - origin).Magnitude
+			local falloff = math.max(0, 1 - distance * STATS.FalloffPerStud)
+			local damage = STATS.Damage * falloff * damageScale
+
+			if hit.Name == "Head" then
+				damage *= STATS.HeadshotMultiplier
+			end
+
+			humanoid:TakeDamage(damage)
+			break
+		end
+
+		-- Hit a wall: punch through with reduced damage
+		walls += 1
+		damageScale *= STATS.WallDamageKeep
+		table.insert(ignore, hit)
+		startPos = result.Position + direction.Unit * 0.5
+		direction = direction.Unit * math.max(0, STATS.Range - (startPos - origin).Magnitude)
+	end
+end
+
+return Weapon</code></pre>
+    </section>
+  </main>
+
+  <footer>
+    <p>Designed &amp; built by Y2Payus · &copy; <span id="year"></span> · Not affiliated with Roblox Corporation.</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/projects.js"></script>
+</body>
+</html>

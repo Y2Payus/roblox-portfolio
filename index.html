@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#070812" />
+  <title>Y2Payus | Roblox Developer Portfolio</title>
+  <meta name="description" content="Interactive portfolio of a Roblox developer: UI and GUI design and Luau scripting." />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div id="loader" aria-hidden="true">
+    <div class="loader-inner">
+      <div class="cube"></div>
+      <p>Portfolio · Loading experience</p>
+      <div class="bar"><span id="loader-bar"></span></div>
+      <strong id="loader-pct">0%</strong>
+    </div>
+  </div>
+
+  <a class="skip" href="#home">Skip to content</a>
+  <canvas id="bg" aria-hidden="true"></canvas>
+
+  <header class="nav">
+    <a class="logo" href="#home"><svg class="logo-mark" viewBox="0 0 32 32" width="26" height="26" aria-hidden="true"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M4 10l12 7 12-7M16 17v12" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span>Y2Payus Roblox's Portfolio</span></a>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="roblox.html">Roblox Work</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section id="home" class="hero">
+      <p class="hello reveal"> Hello Fellow Developers!, I'm</p>
+      <h1 class="reveal">Y2Payus</h1>
+      <h2 class="reveal">I'm a <span id="typed"></span><span class="caret">|</span></h2>
+      <p class="intro reveal">I build Roblox experiences with clean Luau code, polished UI and systems players love. Take a look around.</p>
+      <div class="cta reveal">
+        <a class="btn primary" href="roblox.html">View My Work</a>
+        <a class="btn" href="#contact">Contact Me</a>
+      </div>
+      <div class="socials reveal">
+        <span class="pill">Discord: takahashigg01</span>
+      </div>
+      <div class="badges reveal">
+        <div><b>Luau</b><span>Scripting · Systems</span></div>
+        <div><b>Roblox Studio</b><span>Scripting · UI · GUI </span></div>
+      </div>
+      <a class="scroll-cue" href="#about">Scroll</a>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="section">
+      <p class="kicker reveal">01 · About</p>
+      <h3 class="reveal">A bit about me</h3>
+      <div class="two-col">
+        <div class="reveal">
+          <p>Hi, I'm Y2Payus. I started making games on Roblox in YEAR and I love turning ideas into playable experiences. I would love to work with you all, i'm very much open to any project, feel free to contact me!</p>
+          <ul class="roles">
+            <li>Roblox Scripter</li>
+            <li>Game Designer</li>
+            <li>UI / UX Designer</li>
+          </ul>
+        </div>
+        <div class="stats reveal">
+          <div><strong data-count="1">0</strong><span>Year(s) experience</span></div>
+          <div><strong data-count="10">0</strong><span>Designs made for developers</span></div>
+          <div><strong data-count="100+" data-suffix="K+">0</strong><span>Total visits</span></div>
+        </div>
+      </div>
+      <div class="info-cards">
+        <div class="info reveal"><small>Email</small><b>rtakahashi600@gmail.com</b></div>
+        <div class="info reveal"><small>Commissions</small><b>Open for work</b></div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" class="section">
+      <p class="kicker reveal">02 · Skills</p>
+      <h3 class="reveal">What I work with</h3>
+      <div class="skill-cards">
+        <div class="skill-card reveal"><h4>UI Design</h4><p>Clean, readable layouts and visual style for in-game interfaces.</p></div>
+        <div class="skill-card reveal"><h4>GUI Design</h4><p>Roblox GUIs built to scale across phones, tablets and PC.</p></div>
+        <div class="skill-card reveal"><h4>Scripting (Luau)</h4><p>Gameplay systems and interface logic written in clean, modular Luau.</p></div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section">
+      <p class="kicker reveal">03 · Contact</p>
+      <h3 class="reveal">Let's work together</h3>
+      <div class="two-col">
+        <div class="reveal">
+          <p>Open for commissions and team projects. Send a message and I'll get back to you.</p>
+          <p class="mini">Email: <a href="mailto:rtakahashi600@gmail.com">rtakahashi600@gmail.com</a></p>
+          <p class="mini">Discord: takahashigg01</p>
+        </div>
+        <!-- Works with Formspree: create a form at formspree.io and paste your URL in action -->
+        <form class="form reveal" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+          <input name="name" placeholder="Name" required />
+          <input name="email" type="email" placeholder="Email" required />
+          <input name="subject" placeholder="Subject" />
+          <textarea name="message" rows="5" placeholder="Message" required></textarea>
+          <button class="btn primary" type="submit">Send Message</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Designed &amp; built by Y2Payus · &copy; <span id="year"></span> · Not affiliated with Roblox Corporation.</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
