@@ -87,27 +87,32 @@
   if (canvas && window.THREE && !reduceMotion) {
     var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.outputEncoding = THREE.sRGBEncoding;
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
     camera.position.z = 14;
 
-    // Floating wireframe blocks (a nod to Roblox bricks)
+    // Floating gold Robux logos
     var group = new THREE.Group();
     scene.add(group);
-    var colors = [0x00e0a4, 0x6d7cff, 0x8a5cff];
-    var blocks = [];
+    var logos = [];
+    var logoTexture = new THREE.TextureLoader().load("images/robux-gold.webp", function (texture) {
+      var aspect = texture.image.width / texture.image.height;
+      logos.forEach(function (logo) { logo.scale.x = logo.scale.y * aspect; });
+    });
+    logoTexture.encoding = THREE.sRGBEncoding;
     for (var i = 0; i < 26; i++) {
       var s = Math.random() * 1.1 + 0.4;
-      var geo = new THREE.BoxGeometry(s, s, s);
-      var mat = new THREE.MeshBasicMaterial({
-        color: colors[i % colors.length], wireframe: true, transparent: true, opacity: 0.35
+      var mat = new THREE.SpriteMaterial({
+        map: logoTexture, transparent: true, opacity: 0.35, depthWrite: false,
+        rotation: (Math.random() - 0.5) * Math.PI
       });
-      var m = new THREE.Mesh(geo, mat);
+      var m = new THREE.Sprite(mat);
+      m.scale.set(s, s, 1);
       m.position.set((Math.random() - 0.5) * 30, (Math.random() - 0.5) * 20, (Math.random() - 0.5) * 14 - 2);
-      m.rotation.set(Math.random() * 3, Math.random() * 3, 0);
-      m.userData = { rx: (Math.random() - 0.5) * 0.008, ry: (Math.random() - 0.5) * 0.008, fy: Math.random() * 6, sp: Math.random() * 0.4 + 0.2, baseY: m.position.y };
+      m.userData = { rz: (Math.random() - 0.5) * 0.008, fy: Math.random() * 6, sp: Math.random() * 0.4 + 0.2, baseY: m.position.y };
       group.add(m);
-      blocks.push(m);
+      logos.push(m);
     }
 
     // Star dust
@@ -144,9 +149,8 @@
     function animate() {
       if (!running) return;
       var t = clock.getElapsedTime();
-      blocks.forEach(function (b) {
-        b.rotation.x += b.userData.rx;
-        b.rotation.y += b.userData.ry;
+      logos.forEach(function (b) {
+        b.material.rotation += b.userData.rz;
         b.position.y = b.userData.baseY + Math.sin(t * b.userData.sp + b.userData.fy) * 0.6;
       });
       stars.rotation.y = t * 0.01;

@@ -82,7 +82,7 @@ var projects = [
     title: "Figma",
     description: "Interface mockups, layouts and design systems before they become Roblox GUIs.",
     category: "Tools",
-    image: "",
+    image: "images/figma-transparent.png",
     icon: "pen", color: "#f472b6",
     tags: ["Design", "Prototyping"],
     play: "", code: ""
@@ -91,7 +91,7 @@ var projects = [
     title: "Adobe Photoshop",
     description: "Icons, textures and image assets for GUIs and game thumbnails.",
     category: "Tools",
-    image: "",
+    image: "images/photoshop-transparent.png",
     icon: "layers", color: "#a78bfa",
     tags: ["Assets", "Editing"],
     play: "", code: ""
@@ -100,7 +100,7 @@ var projects = [
     title: "Roblox Studio",
     description: "Building, scripting and testing every experience.",
     category: "Tools",
-    image: "",
+    image: "images/roblox-studio.png",
     icon: "cube", color: "#00e0a4",
     tags: ["Luau", "GUI", "Testing"],
     play: "", code: ""
@@ -109,7 +109,7 @@ var projects = [
     title: "Blender",
     description: "3D models, meshes and renders.",
     category: "Tools",
-    image: "",
+    image: "images/blender-transparent.png",
     icon: "globe", color: "#a3e635",
     tags: ["3D", "Modeling"],
     play: "", code: ""
@@ -118,7 +118,7 @@ var projects = [
     title: "Adobe Illustrator",
     description: "Vector icons and clean scalable graphics.",
     category: "Tools",
-    image: "",
+    image: "images/adobe-illustrator-transparent.png",
     icon: "bezier", color: "#22d3ee",
     tags: ["Vector", "Icons"],
     play: "", code: ""
@@ -127,7 +127,7 @@ var projects = [
     title: "VS Code",
     description: "Writing and organizing Luau code outside of Studio.",
     category: "Tools",
-    image: "",
+    image: "images/vs-code-transparent.png",
     icon: "code", color: "#fbbf24",
     tags: ["Luau", "Editor"],
     play: "", code: ""
